@@ -11,9 +11,3 @@ python -m pip install 'great_expectations[azure]'
 ```
 pip install azure-storage-blob
 ```
-
-```
-pip install snowflake-sqlalchemy
-```
-
-gxstore

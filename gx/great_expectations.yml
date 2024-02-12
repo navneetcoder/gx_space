@@ -1,0 +1,71 @@
+config_version: 3.0
+datasources: {}
+config_variables_file_path: uncommitted/config_variables.yml
+plugins_directory: plugins/
+stores:
+  expectations_az_store:
+    class_name: ExpectationsStore
+    store_backend:
+      class_name: TupleAzureBlobStoreBackend
+      container: expectationsstore
+      prefix: expectations
+      connection_string: ${AZURE_STORAGE_CONNECTION_STRING}
+  validations_AZ_store:
+    class_name: ValidationsStore
+    store_backend:
+      class_name: TupleAzureBlobStoreBackend
+      container: validationsstore
+      prefix: validations
+      connection_string: ${AZURE_STORAGE_CONNECTION_STRING}
+  metrics_az_store:
+    class_name: MetricStore
+    store_backend:
+      class_name: DatabaseStoreBackend
+      credentials: ${local_sql_db_creds}
+  evaluation_parameter_store:
+    class_name: EvaluationParameterStore
+  checkpoint_store:
+    class_name: CheckpointStore
+    store_backend:
+      class_name: TupleFilesystemStoreBackend
+      suppress_store_backend_id: true
+      base_directory: checkpoints/
+  profiler_store:
+    class_name: ProfilerStore
+    store_backend:
+      class_name: TupleFilesystemStoreBackend
+      suppress_store_backend_id: true
+      base_directory: profilers/
+expectations_store_name: expectations_az_store
+validations_store_name: validations_AZ_store
+expectation_suite_name: statistics.sf_statistic_suite
+evaluation_parameter_store_name: evaluation_parameter_store
+checkpoint_store_name: checkpoint_store
+data_docs_sites:
+  az_site:
+    class_name: SiteBuilder
+    show_how_to_buttons: true
+    store_backend:
+      class_name: TupleAzureBlobStoreBackend
+      container: \$web
+      connection_string: ${AZURE_STORAGE_CONNECTION_STRING}
+    site_index_builder:
+      class_name: DefaultSiteIndexBuilder
+anonymous_usage_statistics:
+  data_context_id: 00000000-0000-0000-0000-00000000e003
+  enabled: true
+notebooks:
+include_rendered_content:
+  globally: false
+  expectation_suite: false
+  expectation_validation_result: false
+fluent_datasources:
+  SF_DATASOURCE:
+    type: snowflake
+    assets:
+      customer_asset:
+        type: query
+        order_by: []
+        batch_metadata: {}
+        query: select * from customer
+    connection_string: snowflake://hakaruop:Jenkins%40123@vr64631.central-india.azure/SNOWFLAKE_SAMPLE_DATA/TPCH_SF1?warehouse=COMPUTE_WH&role=ACCOUNTADMIN
